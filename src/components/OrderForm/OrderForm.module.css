@@ -1,0 +1,13 @@
+  .form{
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+  }
+  .button {
+    background-color: aqua;
+    border-color: black;
+
+  }
+  .button:hover{
+    background-color: blue;
+  }
