@@ -1,32 +1,45 @@
-import css from './App.module.css';
-import OrderForm from '../OrderForm/OrderForm';
 
+import { useState } from "react";
+import SearchForm from "../SearchForm/SearchForm";
+import type { Article } from "../../types/article";
+import ArticleList from "../ArticleList/ArticleList";
+import { fetchArticles } from "../../services/articleService";
 
 export default function App() {
+  //declair and typing a state
+  const [articles, setArticles] = useState<Article[]>([]);
+  // adding isLoading state
+  const [isLoading, setIsLoading] = useState(false);
+  //1.declare state error 
+  const [isError, setIsError] = useState(false);
 
-  // const handleSubmit = (formData: FormData) => {
-  const handleOrder = (data: string) => {
-    console.log("Order received from:", data);
-
-    
-//     const username = formData.get("username") as string;
-//     console.log("Name:", username);
-//     if (username !== "") {
-//       alert("Submited");
-//     } else {
-//       alert("Please fill out the field");
-// }
+  const handleSearch = async (topic: string) => {
+    //2.add block try...catch
+    try {
+      //change isLoading state to "true" before the query
+      setIsLoading(true);
+      //3.set error state to false before every query
+      setIsError(false);
+      const data = await fetchArticles(topic);
+      
+      //Storing data into the state after the query
+      setArticles(data);
+    } catch {
+      //4. set error state to true
+      setIsError(true);
+    } finally {
+      //5. change isLoading state to "false" after the query
+      setIsLoading(false);
+    }
   };
-
- 
   return (
-    <>
-      <h1>Place your order</h1>
-      <OrderForm onSubmit={handleOrder}></OrderForm>
-    </>
-    // <form className={css.form } action={handleSubmit}>
-    //   <input type="text" name="username" placeholder='Username'/>
-    //   <button className={css.button } type="submit">Submit</button>
-    // </form>
+    <div>
+      <SearchForm onSubmit={handleSearch} />
+      {/*show the message about loading in JSX */}
+      {isLoading && <h1>Loading data, please wait ...</h1>}
+      {/*6. Use error state to show an error */}
+      {isError && <h1>Whoops, something went wrong! Please try again!</h1>}
+      {articles.length > 0 && <ArticleList items={articles} />}
+    </div>
   );
 }
