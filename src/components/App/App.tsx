@@ -4,6 +4,7 @@ import SearchForm from "../SearchForm/SearchForm";
 import type { Article } from "../../types/article";
 import ArticleList from "../ArticleList/ArticleList";
 import { fetchArticles } from "../../services/articleService";
+import OrderForm from "../OrderForm/OrderForm";
 
 export default function App() {
   //declair and typing a state
@@ -34,6 +35,12 @@ export default function App() {
   };
   return (
     <div>
+      <OrderForm />
+      <hr />
+      <hr />
+      <hr />
+      <hr />
+
       <SearchForm onSubmit={handleSearch} />
       {/*show the message about loading in JSX */}
       {isLoading && <h1>Loading data, please wait ...</h1>}
